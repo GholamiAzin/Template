@@ -12,16 +12,16 @@ import Size from "./Size"
 import DeliveryPolicy from "./DeliveryPolicy"
 
 
-const PictureProduct = ({src,pictureProductId,picClass,isOpen}) => {
+const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}) => {
 
   const [state, setState] = useState(false)
-  const{increase,decrease} = useContext(CountVar)
+  const{increase,decrease,setItemID,generalIndex,setGeneralIndex} = useContext(CountVar)
   const [showSvg, setShowSvg] = useState(false)
-  const[cartOnPic,toggleCartOnPic] = useModal(false)
+  // const[cartOnPic,toggleCartOnPic] = useModal()
   const [index, setIndex] = useState(0)
 
 
-  const [cachedList] = UseFetch([])
+  // const [cachedList] = UseFetch([])
 
   const handleColor=()=>{
     state?decrease():increase()
@@ -30,10 +30,19 @@ const PictureProduct = ({src,pictureProductId,picClass,isOpen}) => {
     setShowSvg(!showSvg)
   }
 //callback for get index of Size component
-  const getIndex = (index)=>{
-    setIndex(index)
-  }
+  // const getIndex = (index)=>{
+  //   setIndex(index)
+  // }
 
+  //set an index for each cart individualy in this callback function for open the modal
+  const handleModal =(cartIndex)=>{
+    // console.log('item',item);
+    // setItemID(pictureProductId)
+    setGeneralIndex(cartIndex)
+    // toggleCartOnPic(!cart)
+    console.log("cartIndex",cartIndex);
+    // return cartIndex
+  }
   // console.log('rate',cachedList[pictureProductId-1]?.rate);
 
   return (
@@ -57,7 +66,7 @@ const PictureProduct = ({src,pictureProductId,picClass,isOpen}) => {
               </Svg>}
             </div>
             {/* the cart icon shows over on hover */}
-              {showSvg?<Svg myClass={'top-[45%] right-[45%] cursor-pointer absolute'} svgOnClick={()=> toggleCartOnPic()}>
+              {showSvg?<Svg myClass={'top-[45%] right-[45%] cursor-pointer absolute'} svgOnClick={()=>{return openCart(),handleModal(picIndex)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="gray" className="bi bi-cart2" viewBox="0 0 16 16">
                       <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
                     </svg>
@@ -65,7 +74,7 @@ const PictureProduct = ({src,pictureProductId,picClass,isOpen}) => {
               <><Image src={src} imageClass={"w-full h-full  "}/></> 
       }
           {/* click on cart icon opens the modal */}
-        {createPortal(
+        {/* {createPortal(
           <Modal sizeIndex={index} id={pictureProductId} isOpen={cartOnPic} toggleOpen={toggleCartOnPic} isCartOnPic={true} positionModalContainer={"justify-end items-start"} positionModal={'w-[30%] h-[95%] justify-between flex-wrap flex-row-reverse lg:justify-between lg:flex lg:w-[40%] md:justify-between md:flex md:w-[40%] sm:justify-between sm:flex sm:w-[70%]'} positionModalHeader={'items-start'} positionModalContent={''}>
             <ProductCart isOpen={true} productCartId={pictureProductId} starRate={cachedList[pictureProductId-1]?.rate} src={cachedList[pictureProductId-1]?.url} cost={cachedList[pictureProductId-1]?.cost} productName={cachedList[pictureProductId-1]?.name}
         material={cachedList[pictureProductId-1]?.material} productClass={'w-[60%] flex flex-col rounded md:w-[65%] sm:w-full'} pictureProductClass={'md:w-full sm:w-[60%]'}/>
@@ -73,7 +82,7 @@ const PictureProduct = ({src,pictureProductId,picClass,isOpen}) => {
             <Size onClick={getIndex}/>
             <DeliveryPolicy DeliveryPolicyClass={'mt-[15%] md:mt-0'}/>
           </Modal>
-        ,document.body)}
+        ,document.body)} */}
     </div>
     </>
   )

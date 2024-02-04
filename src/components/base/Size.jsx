@@ -39,6 +39,7 @@ const Size = ({onClick}) => {
 
       
     // }
+    //this function returns index to parent component
     const handleIndex=(index)=>{
       setColor(index)
       return index
@@ -49,7 +50,7 @@ const Size = ({onClick}) => {
     {[...Array(5)].map((btn,index)=>{
         return(
         <div key={index} className="w-1/5 flex justify-between items-center"onClick={()=>onClick(handleIndex(index))}>
-           {color===index?<button className={clsx(` border border-orange-500 rounded w-full text-xs font-semibold py-2 bg-orange-500 text-white`)}>{size[index]}</button>
+           {color==index?<button className={clsx(` border border-orange-500 rounded w-full text-xs font-semibold py-2 bg-orange-500 text-white`)}>{size[index]}</button>
             :<button className={clsx(` border border-orange-500 rounded text-orange-500 w-full text-xs font-semibold py-2`)}>{size[index]}</button>}
         </div>
         )
