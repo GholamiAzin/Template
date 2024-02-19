@@ -13,10 +13,11 @@ import useModal from "../hooks/useModal";
 // import { ref ,listAll ,getDownloadURL } from "firebase/storage";
 
 const Products = () => {
-  const [list, setList] = useState([])
-  const {itemID,generalIndex} = useContext(CountVar)
+  // const [list, setList] = useState([])
+  const {itemID,generalIndex,list,setList} = useContext(CountVar)
   const [sizeindex, setIndex] = useState(0)
   const[cartOnPic,toggleCartOnPic] = useModal()
+  // const [itemInModal, setItemInModal] = useState({})
 
 
 
@@ -67,27 +68,81 @@ const Products = () => {
   //   // return callBackBool
   //   // console.log('bool',bool);
   // }
-
+const setFn=(props)=>{
+  toggleCartOnPic()
+  // setItemInModal(props)
+}
   return (
       <div className="w-full flex flex-wrap justify-between gap-y-4">
         {
           list.map((item)=>{
-            // const imgURL = imageList[index]//if you have two array you can do this for the second one
-            // console.log('id',item.id);
-            return <ProductCart cartIndex={item.productIndex} onClickSvg={toggleCartOnPic} pictureProductClass={'w-full h-2/3'} productClass={'w-[23%] flex flex-col rounded md:w-[45%] sm:w-full'} productCartId={item.id} key={item.id} src={item.url} productName={item.name}
-              material={item.material} cost={item.cost}  />
+            return (
+              item.isAddToCart ? //if the item added into addToCart in Modal Before it will show
+                <ProductCart
+                  checkIsModal={false} 
+                  cartIndex={item.productIndex} 
+                  // onClickSvg={()=>setFn(item)} //for open and close modal
+                  // item={item}//for sending it to Star Component for changing rateStar 
+                  pictureProductClass={'w-full h-2/3 md:w-[60%] sm:w-[60%]'} 
+                  explanationProductClass={'w-full md:w-[80%] sm:w-[90%] '} 
+                  productClass={'w-[21%] flex flex-col rounded md:items-center md:w-[40%] md:p-3 sm:w-[50%] sm:p-3 sm:items-center'} 
+                  productCartId={item.id} 
+                  key={item.id} 
+                  src={item.url} 
+                  productName={item.name}
+                  material={item.material} 
+                  cost={item.cost}  />:
+                <ProductCart
+                  checkIsModal={false} 
+                  cartIndex={item.productIndex} 
+                  onClickSvg={()=>setFn(item)} //for open and close modal
+                  // item={item}//for sending it to Star Component for changing rateStar 
+                  pictureProductClass={'w-full h-2/3 md:w-[60%] sm:w-[60%]'} 
+                  explanationProductClass={'w-full md:w-[80%] sm:w-[90%] '} 
+                  productClass={'w-[21%] flex flex-col rounded md:items-center md:w-[40%] md:p-3 sm:w-[50%] sm:p-3 sm:items-center'} 
+                  productCartId={item.id} 
+                  key={item.id} 
+                  src={item.url} 
+                  productName={item.name}
+                  material={item.material} 
+                  cost={item.cost}  />
+
+            )
           })
         }
         {list.map((item,index)=>{
           // if(callBool && index == list[index].productIndex - 1){
             if(index == generalIndex - 1){
             return (createPortal(
-              <Modal sizeIndex={sizeindex} id={list[index].id} isOpen={cartOnPic} toggleOpen={toggleCartOnPic} isCartOnPic={true} positionModalContainer={"justify-end items-start"} positionModal={'w-[30%] h-[95%] justify-between flex-wrap flex-row-reverse lg:justify-between lg:flex lg:w-[40%] md:justify-between md:flex md:w-[40%] sm:justify-between sm:flex sm:w-[70%]'} positionModalHeader={'items-start'} positionModalContent={''}>
-                <ProductCart  isOpen={true} productCartId={list[index].id} starRate={item?.rate} src={item?.url} cost={item?.cost} productName={item?.name}
-            material={item?.material} productClass={'w-[60%] flex flex-col rounded md:w-[65%] sm:w-full'} pictureProductClass={'md:w-full sm:w-[60%]'}/>
-                <HandleCount/>
-                <Size onClick={getIndex}/>
-                <DeliveryPolicy DeliveryPolicyClass={'mt-[15%] md:mt-0'}/>
+              <Modal 
+                item={item} //for sending it to Modal Component for changing counterProduct and size 
+                sizeIndex={sizeindex} 
+                id={list[index].id} 
+                isOpen={cartOnPic} 
+                toggleOpen={toggleCartOnPic} 
+                isCartOnPic={true} 
+                positionModalContainer={"justify-end items-start"} 
+                positionModal={'w-[30%] h-[95%] justify-between flex-row-reverse lg:justify-between lg:flex lg:w-[40%] md:justify-between md:flex md:w-[40%] sm:justify-between sm:flex sm:w-[70%] sm:h-[60%]'} 
+                positionModalHeader={'items-start'} 
+                positionModalContent={''}
+              >
+                  <ProductCart
+                    checkIsModal={true}
+                    isOpen={true}
+                    item={item}//for sending it to Star Component for changing rateStar 
+                    productCartId={list[index].id} 
+                    starRate={item?.rate} 
+                    src={item?.url} 
+                    cost={item?.cost} 
+                    productName={item?.name}
+                    material={item?.material} 
+                    productClass={'w-[60%] flex flex-col rounded md:w-[65%] sm:w-full'} 
+                    pictureProductClass={'md:w-full sm:w-[60%]'}
+                    explanationProductClass={''}
+                  />
+                  <HandleCount/>
+                  <Size onClick={getIndex}/>
+                  <DeliveryPolicy DeliveryPolicyClass={'mt-[15%] md:mt-2 sm:mt-2'}/>
               </Modal>
             ,document.body))
           }
