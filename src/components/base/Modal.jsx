@@ -46,6 +46,7 @@ const EditList=async()=>{
         // console.log("list",list);
         addToCart.push(data.data)
         setAddToCart(addToCart)
+        // setAddToCart((prevCart) => [...prevCart, data.data])
         localStorage.setItem('addToCart_updatedData',JSON.stringify(addToCart))
         // newAddToCart?.push(data.data)
         // setNewAddToCart(newAddToCart)

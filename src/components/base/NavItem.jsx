@@ -11,7 +11,6 @@ import DeliveryPolicy from "./DeliveryPolicy"
 const NavItem = ({parentClass,hamburgerClass,categoriesClass,accountClass}) => {
   const [openCart,toggleOpenCart] = useModal(false)
   const [isHamburgerMenu,toggleIsHamburgerMenu] = useModal(false)
-  // const {addToCart,counter}=useContext(CountVar)
   const {addToCart,setAddToCart}=useContext(CountVar)
   const address={
     name:'Wade  John Smith',
@@ -21,9 +20,17 @@ const NavItem = ({parentClass,hamburgerClass,categoriesClass,accountClass}) => {
     NO:'Po 25698',
     country:'United States'
   }
+
   // useEffect(() => {
   //   const data = localStorage.getItem('addToCart_updatedData')
-  //   setAddToCart(JSON.parse(data))
+  //   const jsonData = JSON.parse(data)
+  //   if( jsonData !== addToCart){
+  //     console.log('addToCart',addToCart);
+  //     setAddToCart(jsonData)
+  //   }
+  //   else{
+  //     console.log('hi NavItem');
+  //   }
   // }, [addToCart])
   
   // console.log('addToCart',typeof addToCart);
@@ -37,8 +44,8 @@ const NavItem = ({parentClass,hamburgerClass,categoriesClass,accountClass}) => {
   }
   
   const toggleModal =()=>{
-    const data = localStorage.getItem('addToCart_updatedData')
-    setAddToCart(JSON.parse(data))
+    // const data = localStorage.getItem('addToCart_updatedData')
+    // setAddToCart(JSON.parse(data))
     // if there is items in addToCart so it opens modal
     if (addToCart?.length !== 0) {
       toggleOpenCart()

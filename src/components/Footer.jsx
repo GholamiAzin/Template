@@ -9,8 +9,16 @@ const Footer = () => {
 
   // useEffect(() => {
   //   const data = localStorage.getItem('addToCart_updatedData')
-  //   setAddToCart(JSON.parse(data))
+  //   const jsonData = JSON.parse(data)
+  //   if( jsonData !== addToCart){
+  //     console.log('addToCart in footer',addToCart);
+  //     setAddToCart((prevCart) => [...prevCart, jsonData])
+  //   }
+  //   else{
+  //     console.log('hi Footer');
+  //   }
   // }, [addToCart])
+  
   
   // useEffect(() => {
   //  setAdded(addToCart?.length)
@@ -36,6 +44,7 @@ const Footer = () => {
   const calculateCost=()=>{
     // const data = localStorage.getItem('addToCart_updatedData')
     // setAddToCart(JSON.parse(data))
+    // getItemFromLocalStorage()
     let sum = 0
     // if addToCart is not empty then map over it and calculate the total price
     if (addToCart?.length != 0) {

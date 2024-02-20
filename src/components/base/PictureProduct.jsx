@@ -9,7 +9,7 @@ import { getProduct, updateProduct } from "../../services/productsServices"
 const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}) => {
 
   const [state, setState] = useState(false)
-  const{increase,decrease,list,setList,setGeneralIndex,setAddToCart,addToCart} = useContext(CountVar)
+  const{increase,decrease,list,setGeneralIndex,setAddToCart,addToCart} = useContext(CountVar)
   const [showSvg, setShowSvg] = useState(false)
   const [stateUpdate, dispatchUpdate] = useReducer(updateReducer,list)
   // const [stateDelete, dispatchDelete] = useReducer(reducer,addToCart)
@@ -28,6 +28,18 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
     fetchProduct()
   }, [isAdd])  
   
+  // useEffect(() => {
+  //   const data = localStorage.getItem('addToCart_updatedData')
+  //   const jsonData = JSON.parse(data)
+  //   if( jsonData !== addToCart){
+  //     console.log('addToCart',addToCart);
+  //     setAddToCart(jsonData)
+  //   }
+  //   else{
+  //     console.log('hi PictureProduct');
+  //   }
+  // }, [addToCart])
+
 //   useEffect(() => {
 //     const data = localStorage.getItem('addToCart_updatedData')
 //     const jsonData = JSON.parse(data)
@@ -70,12 +82,14 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
   const deleteItem = async()=>{
     updateList()
     // const data = await getProduct(pictureProductId)
-    const itemIndex = addToCart.findIndex((item)=>{return item.id == pictureProductId})
     // console.log('deleteStateIndex',deleteStateIndex);
-    addToCart.splice(itemIndex , 1)
+    // const itemIndex = addToCart.findIndex((item)=>{return item.id == pictureProductId})
+    // addToCart.splice(itemIndex , 1)
     // handleSvg()
     // setShowSvg(false)
-    setAddToCart(addToCart)
+
+    setAddToCart((prevCart) => prevCart.filter((item) => item.id !== pictureProductId));
+    // setAddToCart(addToCart)
     localStorage.setItem('addToCart_updatedData',JSON.stringify(addToCart))
     // console.log('addToCart',addToCart);
     // dispatchDelete({type:'delete',data:data.data})
