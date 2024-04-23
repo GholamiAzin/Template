@@ -1,47 +1,86 @@
 // import { doc, updateDoc } from "firebase/firestore"
 import {  useContext, useEffect, useReducer, useState } from "react"
-import { getProduct, updateProduct } from "../../services/productsServices"
+import { getProduct, getUser, updateProduct, updateUser } from "../../services/productsServices"
 import { updateReducer } from "../../reducers/reducer"
 import { CountVar } from "../../views/Home"
+import { logInData } from "../../App"
 // import { dataBase } from "../../config/firebase"
 
 const Star = ({starId,rateIndex,checkIsModal,itemStar,starClass}) => {
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(null)
-  const [state, setState] = useState({})
+  const [starState, setStarState] = useState(0)
   const {list} = useContext(CountVar)
-  // const [stateStar, dispatch] = useReducer(updateReducer, list)
   const [stateUpdate, dispatchUpdate] = useReducer(updateReducer, list)
+  const {logedInUser,setLogedInUser} = useContext(logInData)
 
-  const getStarData =async()=>{//for getting the object that we got the id from props on Star Component
+  useEffect(() => {
+    const checkStar = () =>{
+      if (logedInUser?.id) {
+        const findStar = logedInUser?.rateStars.find(item => item.id == starId)
+        if (findStar) {
+          setRating(findStar.rate)
+        }
+        else{
+          setRating(0)
+        }
+      }
+      else{
+        setRating(0)
+      }
+    }
+    checkStar()
+  }, [])
+  
+  const rateMyStar = async (itemIndex)=>{//for update the rate of object that we got
+    if (logedInUser?.id) {
+      try {
+        setRating(itemIndex)
+        const data = await getProduct(starId)
+        const rateData = await updateProduct({...data.data,rate:itemIndex},starId)
+        dispatchUpdate({type:'update',data:rateData.data})
+  
+        if(logedInUser?.rateStars?.length){
+          const findRateStar = logedInUser?.rateStars.find(item => item.id == starId)
+          if(findRateStar){
+            findRateStar['rate'] = itemIndex
+          }else{
+            logedInUser?.rateStars.push({'id':starId , 'rate':itemIndex})
+          }
+        }else{
+          logedInUser?.rateStars.push({'id':starId , 'rate':itemIndex})
+        }
+        await updateUser(logedInUser,logedInUser?.id)
+        setLogedInUser(logedInUser)
+      } 
+      catch (error) {
+        console.log('error',error);
+      }
+    }else{
+      alert('Please sign in first!!!')
+    }
+  }
+  
+  const checkModal =async()=>{
     try {
-      const data = await getProduct(starId)
-      // console.log('data',data.data);
-      return data.data
+      const userData = await getUser(logedInUser?.id)
+      // const userData = JSON.parse(localStorage.getItem('user_log'))
+      if (logedInUser?.id) {
+        const find = userData?.data?.rateStars?.find(item => item.id == starId)
+        if (find) {
+          setStarState(find.rate)
+        }else{
+          setStarState(0)
+        }
+        
+      } else {
+        setStarState(0)
+      }
     } catch (error) {
       console.log('error',error);
     }
   }
-  
-  const rateMyStar = async (itemIndex)=>{//for update the rate of object that we got
-    try {
-      setRating(itemIndex)
-      const data = await getProduct(starId)
-      // console.log('data',data.data);
-      const rateData = await updateProduct({...data.data,rate:itemIndex},starId)
-      // console.log('rateData',rateData.data);
-      dispatchUpdate({type:'update',data:rateData.data})
-    } 
-    catch (error) {
-      console.log('error',error);
-    }
-  }
-  
-  const checkModal =async()=>{//for setting the object into a state for comparison in line 53
-    const star = await getStarData()
-    setState(star.rate)
-  }
-  // console.log('list in star',list);
+
   return (
     <>
       {checkIsModal && checkModal()?
@@ -52,7 +91,7 @@ const Star = ({starId,rateIndex,checkIsModal,itemStar,starClass}) => {
                 className={` ${starClass}`} 
                 key = {index}
               >
-                {index <= state ? 
+                {index <= starState ? 
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     width="13" 

@@ -3,7 +3,8 @@ import Image from "./Image"
 import Svg from "./Svg"
 import { CountVar } from "../../views/Home"
 import { reducer, updateReducer } from "../../reducers/reducer"
-import { getProduct, updateProduct } from "../../services/productsServices"
+import { getProduct, updateProduct, updateUser } from "../../services/productsServices"
+import { logInData } from "../../App"
 
 
 const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}) => {
@@ -14,6 +15,8 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
   const [stateUpdate, dispatchUpdate] = useReducer(updateReducer,list)
   // const [stateDelete, dispatchDelete] = useReducer(reducer,addToCart)
   const [isAdd, setIsAdd] = useState({})
+  const {logedInUser,setLogedInUser}=useContext(logInData)
+
   // const [newAddToCart, setNewAddToCart] = useState()
 
   // const [stateAddToCart, setStateAddToCart] = useState(addToCart)
@@ -28,36 +31,34 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
     fetchProduct()
   }, [isAdd])  
   
-  // useEffect(() => {
-  //   const data = localStorage.getItem('addToCart_updatedData')
-  //   const jsonData = JSON.parse(data)
-  //   if( jsonData !== addToCart){
-  //     console.log('addToCart',addToCart);
-  //     setAddToCart(jsonData)
-  //   }
-  //   else{
-  //     console.log('hi PictureProduct');
-  //   }
-  // }, [addToCart])
 
 //   useEffect(() => {
-//     const data = localStorage.getItem('addToCart_updatedData')
-//     const jsonData = JSON.parse(data)
-//     if(jsonData !== null){
-//      setNewAddToCart(jsonData)
-//      }
-//      else{
-//          setNewAddToCart([])
-//      }
-//  }, [newAddToCart])
+//     const getItem=()=>{
+//       const data = localStorage.getItem('user_log')
+//       setLogedInUser(JSON.parse(data))
+//     }
+//     getItem()
+// }, [logedInUser])
 
-//   useEffect(() => {
-//   const data = localStorage.getItem('addToCart_updatedData')
-//   setAddToCart(JSON.parse(data))
-// }, [addToCart])
-
-  const handleColor=()=>{
-    state?decrease():increase()
+  const handleColor=async()=>{
+    // state?decrease():increase()
+    if(logedInUser?.id){
+      setState(!state)
+      if(state){
+        decrease()
+        const indexItem = logedInUser?.wishList?.findIndex(item => item.id === pictureProductId)
+        logedInUser?.wishList?.slice(indexItem,1)
+        setLogedInUser(logedInUser)
+        await updateUser(logedInUser,logedInUser?.id)
+      }else{
+        increase()
+        logedInUser?.wishList?.push(pictureProductId)
+        setLogedInUser(logedInUser)
+        await updateUser(logedInUser,logedInUser?.id)
+      }
+    }else{
+      alert("Please Sign In First!!!")
+    }
   }
   const handleSvg = () =>{
     setShowSvg(!showSvg)
@@ -81,16 +82,20 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
 
   const deleteItem = async()=>{
     updateList()
-    // const data = await getProduct(pictureProductId)
-    // console.log('deleteStateIndex',deleteStateIndex);
-    // const itemIndex = addToCart.findIndex((item)=>{return item.id == pictureProductId})
-    // addToCart.splice(itemIndex , 1)
-    // handleSvg()
-    // setShowSvg(false)
 
-    setAddToCart((prevCart) => prevCart.filter((item) => item.id !== pictureProductId));
+    //delete the selected id from addToCart
+    // setAddToCart((prevCart) => prevCart.filter((item) => item.id !== pictureProductId));
+
+    //delete the selected id from logedInUser
+    // setLogedInUser((prevLogedInUser?.basketList) => prevLogedInUser?.basketList?.filter((item) => item.id !== pictureProductId))
+    const deleteIndex = logedInUser?.basketList?.findIndex((item)=> {return item.id == pictureProductId})
+    // console.log('deleteIndex',deleteIndex);
+    logedInUser?.basketList?.splice(deleteIndex,1)
+    await updateUser(logedInUser,logedInUser?.id)
+    setLogedInUser(logedInUser)
+    // localStorage.setItem('user_log',JSON.stringify(logedInUser))
+
     // setAddToCart(addToCart)
-    localStorage.setItem('addToCart_updatedData',JSON.stringify(addToCart))
     // console.log('addToCart',addToCart);
     // dispatchDelete({type:'delete',data:data.data})
     // const itemIndex = addToCart.findIndex((item)=>{return item.id == pictureProductId})
@@ -101,6 +106,11 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
     //   }
     // })
     // console.log('addToCart in deleteItem : ',addToCart);
+  }
+
+  const handleOpenCart =()=>{
+    openCart()
+    handleModal(picIndex)
   }
 
   return (
@@ -135,7 +145,7 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
                 {/* for hover effect over the imege */}
                 <div className="absolute rounded-lg inset-0 hover:bg-black hover:opacity-25"></div>
                 {/* the heart over the image */}
-                <div className="absolute top-3 right-3 cursor-pointer  " onClick={()=>{ return setState(!state) , handleColor()}}>
+                <div className="absolute top-3 right-3 cursor-pointer  " onClick={()=>{handleColor()}}>
                   {/**if the state is true means user clicked on a heart and it turns red */}
                   {state?<Svg myClass={"top-1 right-1 absolute bg-white"}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="red" className="bi bi-suit-heart" viewBox="0 0 16 16">
@@ -150,7 +160,7 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
                   </Svg>}
                 </div>
                 {/* the cart icon shows over on hover */}
-                  {showSvg?<Svg myClass={'top-[45%] right-[45%] cursor-pointer absolute bg-white'} svgOnClick={()=>{return openCart(),handleModal(picIndex)}}>
+                  {showSvg?<Svg myClass={'top-[45%] right-[45%] cursor-pointer absolute bg-white'} svgOnClick={()=>handleOpenCart()}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="gray" className="bi bi-cart2" viewBox="0 0 16 16">
                           <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
                         </svg>

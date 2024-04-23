@@ -1,19 +1,16 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import IconSpan from "./IconSpan";
-// import UseFetch from "../../hooks/UseFetch";
 import { CountVar } from "../../views/Home"
-import { getProduct, updateProduct } from "../../services/productsServices";
-import { reducer, updateReducer } from "../../reducers/reducer";
-// import { doc, getDoc, updateDoc } from "firebase/firestore";
-// import { dataBase } from "../../config/firebase";
-
+import { updateProduct, updateUser } from "../../services/productsServices";
+import { updateReducer } from "../../reducers/reducer";
+import { logInData } from "../../App";
 
 
 const Modal = ({children,item,isOpen,toggleOpen,isCartOnPic,positionModalContainer,positionModal,positionModalHeader,positionModalContent,id,sizeIndex}) => {
-    const {list,color,counter,setCounter,size,productCost,setProductCost,setColor,addToCart,setAddToCart}=useContext(CountVar)
+    const {list,color,counter,setCounter,size,productCost,setProductCost,setColor}=useContext(CountVar)
     const [state, setState] = useState(item)
-    // const [newAddToCart, setNewAddToCart] = useState()
     const [stateUpdate, dispatchUpdate] = useReducer(updateReducer, list)
+    const {logedInUser,setLogedInUser}=useContext(logInData)
 
     useEffect(() => {
         setState(item)
@@ -37,31 +34,25 @@ const EditList=async()=>{
     if (counter == 0 || color == -1) {
         alert('please add a size and counter...')
     }
-    else{
+    else if(logedInUser?.id){
         // update cart
         const data = await updateProduct({...state,counterProduct:counter,size:size[sizeIndex],isAddToCart:true},id)
         // const data = await updateProduct({...itemData?.data,counterProduct:counter,size:size[sizeIndex]},id)
         // dispatch for update
         dispatchUpdate({type:'update',data:data.data})
-        // console.log("list",list);
-        addToCart.push(data.data)
-        setAddToCart(addToCart)
-        // setAddToCart((prevCart) => [...prevCart, data.data])
-        localStorage.setItem('addToCart_updatedData',JSON.stringify(addToCart))
-        // newAddToCart?.push(data.data)
-        // setNewAddToCart(newAddToCart)
-        // localStorage.setItem('addToCart_updatedData',JSON.stringify(newAddToCart))
+        logedInUser?.basketList?.push(data?.data)
+        setLogedInUser(logedInUser)
+        await updateUser(logedInUser,logedInUser?.id)
+        // localStorage.setItem('user_log',JSON.stringify(logedInUser))
         handleSvgClose()
+    }else{
+        alert('please sign in first!!!')
     }
-}
-// console.log('list',list);
-// console.log('addToCart',addToCart);
-    
+}    
     //for cost in footer of modal
     const handleCost=()=>{
         setProductCost(counter*item?.cost)
         return productCost
-        
     }
     //for the close button top of modal
     const handleSvgClose=()=>{

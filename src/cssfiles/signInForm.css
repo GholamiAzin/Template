@@ -1,0 +1,17 @@
+.btn3{
+    transform: scale(1);
+    transition: transform .2s ease-in
+  }
+  
+  .btn3:hover{
+    transform: scale(1.1);
+  }
+  
+  .btn3 span{
+    transform: scale(1);
+    transition: transform .3s ease-in
+  }
+  
+  .btn3:hover span{
+    transform: scale(1.1, 1.2);
+  }

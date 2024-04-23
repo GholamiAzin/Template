@@ -1,4 +1,3 @@
-// import UseFetch from "../hooks/UseFetch";
 import ProductCart from "./ProductCart"
 import {getAllProducts} from '../services/productsServices'
 import { useContext, useEffect, useState } from "react";
@@ -9,12 +8,12 @@ import HandleCount from "./base/HandleCount";
 import Size from "./base/Size";
 import DeliveryPolicy from "./base/DeliveryPolicy";
 import useModal from "../hooks/useModal";
-// import { storage } from "../config/firebase"
-// import { ref ,listAll ,getDownloadURL } from "firebase/storage";
+import { logInData } from "../App";
 
 const Products = () => {
   // const [list, setList] = useState([])
   const {itemID,generalIndex,list,setList} = useContext(CountVar)
+  const {logedInUser} = useContext(logInData)
   const [sizeindex, setIndex] = useState(0)
   const[cartOnPic,toggleCartOnPic] = useModal()
   // const [itemInModal, setItemInModal] = useState({})
@@ -68,10 +67,11 @@ const Products = () => {
   //   // return callBackBool
   //   // console.log('bool',bool);
   // }
-const setFn=(props)=>{
+const setFn=()=>{
   toggleCartOnPic()
   // setItemInModal(props)
 }
+
   return (
       <div className="w-full flex flex-wrap justify-between gap-y-4">
         {
@@ -91,11 +91,12 @@ const setFn=(props)=>{
                   src={item.url} 
                   productName={item.name}
                   material={item.material} 
-                  cost={item.cost}  />:
+                  cost={item.cost}  />
+                  :
                 <ProductCart
                   checkIsModal={false} 
                   cartIndex={item.productIndex} 
-                  onClickSvg={()=>setFn(item)} //for open and close modal
+                  onClickSvg={()=>setFn()} //for open and close modal
                   // item={item}//for sending it to Star Component for changing rateStar 
                   pictureProductClass={'w-full h-2/3 md:w-[60%] sm:w-[60%]'} 
                   explanationProductClass={'w-full md:w-[80%] sm:w-[90%] '} 
@@ -126,12 +127,12 @@ const setFn=(props)=>{
                 positionModalHeader={'items-start'} 
                 positionModalContent={''}
               >
-                  <ProductCart
+                    <ProductCart
                     checkIsModal={true}
                     isOpen={true}
                     item={item}//for sending it to Star Component for changing rateStar 
                     productCartId={list[index].id} 
-                    starRate={item?.rate} 
+                    starRate={item?.rate}
                     src={item?.url} 
                     cost={item?.cost} 
                     productName={item?.name}
