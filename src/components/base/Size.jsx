@@ -39,7 +39,7 @@ const Size = ({onClick}) => {
 
       
     // }
-    //this function returns index to parent component
+    //this function returns index to products component
     const handleIndex=(index)=>{
       setColor(index)
       return index
@@ -56,27 +56,7 @@ const Size = ({onClick}) => {
         )
         })}
     </div>
-        // {/* <button id={0} className={clsx(`flex items-center justify-center border border-orange-500 rounded text-orange-500 w-1/5 text-xs font-semibold py-2`,color && "bg-orange-500 text-white")}onClick={(e)=>btnColor(e)} value={'S'}>S</button>
-        // <button id={1} className={clsx(`flex items-center justify-center border border-orange-500 rounded text-orange-500 w-1/5 text-xs font-semibold py-2`,color && "bg-orange-500 text-white")}onClick={(e)=>btnColor(e)} value={'M'}>M</button>
-        // <button id={2} className={clsx(`flex items-center justify-center border border-orange-500 rounded text-orange-500 w-1/5 text-xs font-semibold py-2`,color && "bg-orange-500 text-white")}onClick={(e)=>btnColor(e)} value={'L'}>L</button>
-        // <button id={3} className={clsx(`flex items-center justify-center border border-orange-500 rounded text-orange-500 w-1/5 text-xs font-semibold py-2`,color && "bg-orange-500 text-white")}onClick={(e)=>btnColor(e)} value={'XL'}>XL</button>
-        // <button id={4} className={clsx(`flex items-center justify-center border border-orange-500 rounded text-orange-500 w-1/5 text-xs font-semibold py-2`,color && "bg-orange-500 text-white")}onClick={(e)=>btnColor(e)} value={'XXL'}>XXL</button> */}
-        // {/* {sizeList.map((item,index)=>{
-        //   if (item.id==index) {
-            
-        //     return  <Button key={index} id={item.id} btnColor={sendColor} newColor={color} content={item.content}/>
-        //   }
-        //   else{
-        //     console.log('item.id',item.id);
-        //     return  <Button key={index} id={item.id} newColor={color} content={item.content}/>
-        //   }
-        // })} */}
-
-        // {/* <Button btnColor={sendColor} newColor={color} content={'S'}/>
-        // <Button btnColor={sendColor} newColor={color} content={'M'}/>
-        // <Button btnColor={sendColor} newColor={color} content={'L'}/>
-        // <Button btnColor={sendColor} newColor={color} content={'XL'}/>
-        // <Button btnColor={sendColor} newColor={color} content={'XXL'}/> */}
+        
   )
 }
 

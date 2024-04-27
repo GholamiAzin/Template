@@ -5,7 +5,7 @@ import { logInData } from "../App"
 import { getUser } from "../services/productsServices"
 
 const Footer = () => {
-  const {count,addToCart,setAddToCart} = useContext(CountVar)
+  const {count,addToCart,setAddToCart,setCount} = useContext(CountVar)
   const {logedInUser,setLogedInUser}=useContext(logInData)
   const [footerLength, setFooterLength] = useState(0)
   // const [added, setAdded] = useState(0)
@@ -26,21 +26,23 @@ const Footer = () => {
   
   useEffect(() => {
    const gettingLength=async()=>{
-    try {
-      const userData = await getUser(logedInUser?.id)
-    if (userData) {
-      setFooterLength(userData?.data?.basketList?.length)
-      console.log('logedInUser?.basketList?.length ',logedInUser?.basketList?.length);
-      console.log('userData?.data?.basketList?.length ',userData?.data?.basketList?.length);
-    } else {
-      setFooterLength(0)
+    if (logedInUser?.id) {
+      try {
+        const userData = await getUser(logedInUser?.id)
+        setLogedInUser(userData?.data)
+        setCount(userData?.data?.wishList.length)
+  
+      } catch (error) {
+        console.log('error ', error);
+      }
+    }else{
+      // setLogedInUser({})
+      setCount(0)
     }
-    } catch (error) {
-      console.log('error ', error);
-    }
+
    }
    gettingLength()
-  }, [logedInUser?.basketList?.length])
+  }, [logedInUser])
   
 
 //for showing the number of items that added to cart and totalCost
@@ -86,7 +88,7 @@ const Footer = () => {
     <div className="flex bg-orange-500 w-full px-2 py-1 justify-between text-white ">
         <div className="flex justify-between w-1/3 sm:mr-4">
           {/* the number of items that added in cart */}
-            <IconSpan parentDivClass={'gap-x-2'} explainSpanClass={'ml-2'} variables={`${footerLength}`} text={`Items added to Cart`}>
+            <IconSpan parentDivClass={'gap-x-2'} explainSpanClass={'ml-2'} variables={`${logedInUser?.basketList?.length}`} text={`Items added to Cart`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bag-plus" viewBox="0 0 16 16">
                     <path fillRule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5"/>
                     <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>

@@ -29,7 +29,7 @@ const SignInForm = () => {
   // }, [])
   
   return (
-    <div className='w-[30%] p-2 rounded shadow-[0px_10px_15px_0px_rgba(100,116,139,1)] ' >
+    <div className='w-[30%] sm:w-[75%] md:w-[75%] p-2 rounded sm:mt-[10%] md:mt-[60%] shadow-[0px_10px_15px_0px_rgba(100,116,139,1)] ' >
        <Formik className='w-full'
               initialValues={{email : '' , password : ''}}
               validationSchema={Yup.object({
@@ -83,8 +83,9 @@ const SignInForm = () => {
          {/* {({ isSubmitting }) => ( */}
            <Form className='flex flex-col gap-y-4 items-center w-full'>
 
-            <div className='flex'>
+            <div className='flex flex-col gap-y-1 items-center'>
                 <Image src={signInPic} width={'70px'} height={'70px'}/>
+                <span className='text-orange-400 text-sm font-semibold'>Sign In</span>
             </div>
 
             <div className='flex flex-col w-full px-3 gap-y-2'>

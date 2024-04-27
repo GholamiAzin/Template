@@ -12,7 +12,7 @@ import axios from 'axios';
 const Register = () => {
     const navigate = useNavigate()
   return (
-        <div className='w-[30%] p-2 rounded shadow-[0px_10px_15px_0px_rgba(100,116,139,1)] ' >
+        <div className='w-[30%] sm:w-[75%] md:w-[75%] p-2 rounded sm:mt-[80%] md:mt-[65%] shadow-[0px_10px_15px_0px_rgba(100,116,139,1)] ' >
        <Formik className='w-full'
             initialValues={{name:'',family:'',phone:'',address:'',email: '',password:'',copyPassword:'',basketList:[],wishList:[],rateStars:[] }}
             validationSchema={Yup.object({
@@ -124,7 +124,7 @@ const Register = () => {
               />
             </div>
 
-            <div className='flex flex-col w-full px-3 gap-y-2'>
+            <div className='flex flex-col w-full px-3'>
               <label className='text-sm' htmlFor="email">Email :</label>
               <Field
                 className='outline-none border border-gray-300 rounded pl-2 w-full hover:bg-slate-100'

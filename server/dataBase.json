@@ -3,98 +3,90 @@
     {
       "id": "69ad",
       "cost": 11,
-      "counterProduct": 4,
+      "counterProduct": 1,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
-      "rate": 3,
-      "size": "M",
+      "rate": 0,
+      "size": "XL",
       "url": "https://i.im.ge/2024/01/21/YNDq5y.Rectangle-1.png",
-      "productIndex": 1,
-      "isAddToCart": true
+      "productIndex": 1
     },
     {
       "id": "71a4",
       "cost": 22,
-      "counterProduct": 5,
+      "counterProduct": 2,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
-      "rate": 2,
+      "rate": 0,
       "size": "M",
       "url": "https://i.im.ge/2024/01/31/bNFIRh.Rectangle-2.png",
-      "productIndex": 2,
-      "isAddToCart": false
+      "productIndex": 2
     },
     {
       "id": "caf8",
       "cost": 33,
-      "counterProduct": 6,
+      "counterProduct": 5,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "rate": 0,
-      "size": "S",
+      "size": "XXL",
       "url": "https://i.im.ge/2024/01/23/YVGDxm.Rectangle-3.png",
-      "productIndex": 3,
-      "isAddToCart": false
+      "productIndex": 3
     },
     {
       "id": "438e",
       "cost": 44,
-      "counterProduct": 6,
+      "counterProduct": 5,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
-      "rate": 1,
-      "size": "XXL",
+      "rate": 0,
+      "size": "M",
       "url": "https://i.im.ge/2024/01/23/YVzdzX.Rectangle-4.png",
-      "productIndex": 4,
-      "isAddToCart": true
+      "productIndex": 4
     },
     {
       "id": "b81d",
       "cost": 55,
-      "counterProduct": 1,
+      "counterProduct": 3,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "rate": 0,
-      "size": "S",
+      "size": "M",
       "url": "https://i.im.ge/2024/01/23/YVzITY.Rectangle-5.png",
-      "productIndex": 5,
-      "isAddToCart": false
+      "productIndex": 5
     },
     {
       "id": "36ce",
       "cost": 66,
-      "counterProduct": 1,
+      "counterProduct": 8,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "rate": 0,
-      "size": "S",
+      "size": "XXL",
       "url": "https://i.im.ge/2024/01/23/YVzh4C.Rectangle-6.png",
-      "productIndex": 6,
-      "isAddToCart": false
+      "productIndex": 6
     },
     {
       "id": "b61a",
       "cost": 77,
-      "counterProduct": 4,
+      "counterProduct": 7,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "rate": 0,
-      "size": "S",
+      "size": "L",
       "url": "https://i.im.ge/2024/01/23/YVz5tp.Rectangle-7.png",
-      "productIndex": 7,
-      "isAddToCart": false
+      "productIndex": 7
     },
     {
       "id": "ce2c",
       "cost": 88,
-      "counterProduct": 7,
+      "counterProduct": 1,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "rate": 0,
       "size": "M",
       "url": "https://i.im.ge/2024/01/23/YVzwjf.Rectangle-8.png",
-      "productIndex": 8,
-      "isAddToCart": false
+      "productIndex": 8
     }
   ],
   "users": [
@@ -111,51 +103,51 @@
         {
           "id": "69ad",
           "cost": 11,
-          "counterProduct": 4,
+          "counterProduct": 1,
           "material": "Organic Cotton, Fair Trade quality",
           "name": "Rounded neck - T shirt 100% Cotton",
-          "rate": 3,
-          "size": "M",
+          "rate": 0,
+          "size": "XL",
           "url": "https://i.im.ge/2024/01/21/YNDq5y.Rectangle-1.png",
-          "productIndex": 1,
-          "isAddToCart": true
+          "productIndex": 1
         },
         {
-          "id": "438e",
-          "cost": 44,
-          "counterProduct": 6,
+          "id": "ce2c",
+          "cost": 88,
+          "counterProduct": 1,
           "material": "Organic Cotton, Fair Trade quality",
           "name": "Rounded neck - T shirt 100% Cotton",
-          "rate": 1,
-          "size": "XXL",
-          "url": "https://i.im.ge/2024/01/23/YVzdzX.Rectangle-4.png",
-          "productIndex": 4,
-          "isAddToCart": true
+          "rate": 0,
+          "size": "M",
+          "url": "https://i.im.ge/2024/01/23/YVzwjf.Rectangle-8.png",
+          "productIndex": 8
         }
       ],
       "wishList": [
+        "caf8",
+        "b81d",
         "b61a"
       ],
       "rateStars": [
         {
-          "id": "69ad",
+          "id": "caf8",
           "rate": 3
         },
         {
-          "id": "71a4",
-          "rate": 2
-        },
-        {
-          "id": "ce2c",
-          "rate": 4
-        },
-        {
-          "id": "caf8",
-          "rate": 2
-        },
-        {
-          "id": "438e",
+          "id": "69ad",
           "rate": 1
+        },
+        {
+          "id": "36ce",
+          "rate": 2
+        },
+        {
+          "id": "71a4",
+          "rate": 1
+        },
+        {
+          "id": "b61a",
+          "rate": 3
         }
       ]
     },
@@ -168,7 +160,41 @@
       "email": "hdjkgkdsk@yahoo.com",
       "password": "87654321",
       "copyPassword": "87654321",
-      "basketList": [],
+      "basketList": [
+        {
+          "id": "b81d",
+          "cost": 55,
+          "counterProduct": 3,
+          "material": "Organic Cotton, Fair Trade quality",
+          "name": "Rounded neck - T shirt 100% Cotton",
+          "rate": 0,
+          "size": "M",
+          "url": "https://i.im.ge/2024/01/23/YVzITY.Rectangle-5.png",
+          "productIndex": 5
+        },
+        {
+          "id": "caf8",
+          "cost": 33,
+          "counterProduct": 5,
+          "material": "Organic Cotton, Fair Trade quality",
+          "name": "Rounded neck - T shirt 100% Cotton",
+          "rate": 0,
+          "size": "XXL",
+          "url": "https://i.im.ge/2024/01/23/YVGDxm.Rectangle-3.png",
+          "productIndex": 3
+        },
+        {
+          "id": "ce2c",
+          "cost": 88,
+          "counterProduct": 5,
+          "material": "Organic Cotton, Fair Trade quality",
+          "name": "Rounded neck - T shirt 100% Cotton",
+          "rate": 0,
+          "size": "XXL",
+          "url": "https://i.im.ge/2024/01/23/YVzwjf.Rectangle-8.png",
+          "productIndex": 8
+        }
+      ],
       "wishList": [],
       "rateStars": [
         {

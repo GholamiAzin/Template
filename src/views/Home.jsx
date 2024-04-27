@@ -3,7 +3,7 @@ import PrimaryLayout from '../components/PrimaryLayout'
 import Main from '../components/Main'
 // import useModal from '../hooks/useModal'
 
-export const CountVar = createContext({list:[], setList:()=>{},generalIndex:0, setGeneralIndex:()=>{},itemID:'', setItemID: ()=>{}, rateStar:0, setRateStar:()=>{},color:-1,setColor:()=>{},productCost:0,setProductCost:()=>{},size:[],setSizeToDB:()=>{},count:0,increase:()=>{},decrease:()=>{},counter:0,setCounter:()=>{},increaseCounter:()=>{}, decreaseCounter:()=>{},addToCart:[],setAddToCart:()=>{}})
+export const CountVar = createContext({list:[], setList:()=>{},generalIndex:0, setGeneralIndex:()=>{},itemID:'', setItemID: ()=>{}, rateStar:0, setRateStar:()=>{},color:-1,setColor:()=>{},productCost:0,setProductCost:()=>{},size:[],setSizeToDB:()=>{},count:0,setCount:()=>{},increase:()=>{},decrease:()=>{},counter:0,setCounter:()=>{},increaseCounter:()=>{}, decreaseCounter:()=>{},addToCart:[],setAddToCart:()=>{}})
 // cartOnPic:false, toggleCartOnPic:()=>{} ,
 const Home = () => {
   const [list, setList] = useState([])
@@ -41,7 +41,7 @@ const Home = () => {
   }
   return (
     <>
-    <CountVar.Provider value={{list, setList,generalIndex, setGeneralIndex,itemID, setItemID, rateStar, setRateStar,color,setColor,productCost,setProductCost,size,setSizeToDB,count,increase,decrease,counter,setCounter,increaseCounter,decreaseCounter,addToCart,setAddToCart}}>
+    <CountVar.Provider value={{list, setList,generalIndex, setGeneralIndex,itemID, setItemID, rateStar, setRateStar,color,setColor,productCost,setProductCost,size,setSizeToDB,count,setCount,increase,decrease,counter,setCounter,increaseCounter,decreaseCounter,addToCart,setAddToCart}}>
     {/* cartOnPic,toggleCartOnPic, */}
       <PrimaryLayout>
         <Main/>

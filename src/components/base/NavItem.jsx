@@ -155,7 +155,7 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
       </div>
       {/* create modal for hamburger menu */}
       {createPortal(
-        windowWidth <= 768 ? 
+        // windowWidth <= 768 ? 
         <Modal
           isOpen={isHamburgerMenu}
           toggleOpen={toggleIsHamburgerMenu}
@@ -173,7 +173,7 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
             hamburgerClass={'hidden'}
           />
         </Modal>
-      : null
+      // : null
         , document.body)}
 
       {createPortal(

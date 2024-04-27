@@ -16,6 +16,8 @@ const Modal = ({children,item,isOpen,toggleOpen,isCartOnPic,positionModalContain
         setState(item)
     }, [item])
 
+    if(!isOpen) return null;//for open and close modal
+
     // let jsonData = {}
     // useEffect(() => {
     //    const data = localStorage.getItem('addToCart_updatedData')
@@ -36,8 +38,7 @@ const EditList=async()=>{
     }
     else if(logedInUser?.id){
         // update cart
-        const data = await updateProduct({...state,counterProduct:counter,size:size[sizeIndex],isAddToCart:true},id)
-        // const data = await updateProduct({...itemData?.data,counterProduct:counter,size:size[sizeIndex]},id)
+        const data = await updateProduct({...state,counterProduct:counter,size:size[sizeIndex]},id)
         // dispatch for update
         dispatchUpdate({type:'update',data:data.data})
         logedInUser?.basketList?.push(data?.data)
@@ -75,10 +76,8 @@ const EditList=async()=>{
         }
 
     }
-
-    // console.log('list',list);
     
-    if(!isOpen) return null;
+    
 
     return (
         <div onClick={handleClose} className={`modal-container bg-black bg-opacity-25 inset-0 fixed flex ${positionModalContainer}`}> 
