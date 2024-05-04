@@ -2,10 +2,9 @@ import { ErrorMessage, Field, Form, Formik } from 'formik'
 import * as Yup from 'yup';
 import React from 'react'
 import Image from './Image'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import signInPic from '../../assets/Images/signIn.png'
-import { createUser } from '../../services/productsServices'
-import 'react-tooltip/dist/react-tooltip.css'
+import { createUser } from '../../services/usersServices'
 import axios from 'axios';
 
 
@@ -27,7 +26,7 @@ const Register = () => {
                     return new Promise((resolve, reject) => {
                         axios.get(`http://localhost:9000/users`)
                             .then((res) => {
-                              const existEmail = res?.data?.find(item=> item.email == value)
+                              const existEmail = res?.data?.find(item=> item.email === value)
                               if (existEmail) {
                                 resolve(false)
                               } else {
@@ -63,7 +62,6 @@ const Register = () => {
                 <Image src={signInPic} width={'70px'} height={'70px'}/>
                 <span className='text-orange-400 text-sm font-semibold'>Sign Up</span>
             </div>
-
             <div className='flex flex-col w-full px-3'>
               <label className='text-sm' htmlFor="name">First Name :</label>
               <Field

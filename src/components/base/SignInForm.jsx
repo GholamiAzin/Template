@@ -1,32 +1,18 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Image from './Image'
 import signInPic from '../../assets/Images/signIn.png'
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../../cssfiles/signInForm.css'
 import * as Yup from 'yup'
-import { getAllUsers } from '../../services/productsServices';
-import { useContext, useEffect, useState } from 'react';
+import { getUserData } from '../../services/usersServices';
+import { useContext } from 'react';
 import { logInData } from '../../App';
-
+import Swal from 'sweetalert2'
 
 const SignInForm = () => {
   const navigate = useNavigate()
-  const {logedInUser,setLogedInUser} = useContext(logInData)
+  const {setLogedInUser} = useContext(logInData)
 
-  //method 1 for geting users
-  // const [userData, setUserData] = useState([])
-  // useEffect(() => {
-  //   const fetchUser = async () =>{
-  //     try {
-  //       const data = await getAllUsers()
-  //       setUserData(data.data)
-  //       // console.log('data ', data.data);
-  //     } catch (error) {
-  //       console.log('error ', error);
-  //     }
-  //   }
-  //   fetchUser()
-  // }, [])
   
   return (
     <div className='w-[30%] sm:w-[75%] md:w-[75%] p-2 rounded sm:mt-[10%] md:mt-[60%] shadow-[0px_10px_15px_0px_rgba(100,116,139,1)] ' >
@@ -39,45 +25,30 @@ const SignInForm = () => {
                               .max(20,'Must be 20 characters or less')
                               .required('Enter your password please')
               })}
-              onSubmit={(values,{setFieldError})=>{
-                //get all users for searching for the user that wants to login
-                getAllUsers().then(result=> {
-                  //from all users check one by one to check which email and pass is for which user
-                  //method1:
-                  const findUser = result?.data.find(user=>values.email === user.email && values.password === user.password)
-
-                  if(findUser){
-                    alert('login successfuly');
-                    setLogedInUser(findUser)
-                    // localStorage.setItem('user_log',JSON.stringify(findUser))
+              onSubmit={async(values,{setFieldError})=>{
+                const userData = await getUserData(values.email,values.password)//get email and pass and return the user
+                  if(userData?.data){
+                    Swal.fire({//sweet alert to welcome the user
+                      position: "center",
+                      width: 300,
+                      imageHeight: 200,
+                      icon: "success",
+                      title: `welcome ${userData?.data?.name}`,
+                      showConfirmButton: false,
+                      timer: 1500
+                    });
+                    setLogedInUser(userData?.data)
+                    localStorage.setItem('user_data',JSON.stringify(userData?.data))
                     navigate('/')
-                    // console.log("findUser ",findUser);
                   }else{
-                    alert('email or password is not correct!!!')
+                    Swal.fire({//sweet alert error to sign in the user
+                      position: "center",
+                      icon: "error",
+                      title: `email or password is not correct!!!`,
+                      showConfirmButton: false,
+                      timer: 1800
+                    });
                   }
-                  //method2:
-                  // result.data.map(user =>{
-                  //   //why setFieldError shows for both of pass and email??
-                  //   if(values.email === user.email){
-                  //     if(values.password === user.password){
-                  //       alert('login successfuly')
-                  //     }else{
-                  //       setFieldError('password' , 'Enter the correct pass!!!')
-                  //     }
-                  //   }else {
-                  //     setFieldError('email' , 'Enter the correct email!!!')
-                  //   }
-                  // })
-
-                }).catch(err=>console.log('err ',err))
-                //from all users check one by one to check which email and pass is for which user
-                // const findUser = userData.find(user=>values.email === user.email && values.password === user.password)
-                // console.log('findUser ',findUser);
-                // if(findUser){
-                //   alert('email and pass is correct');
-                // }else{
-                //   alert('email or password is not correct!!!')
-                // }
               }}
        >
          {/* {({ isSubmitting }) => ( */}
@@ -108,7 +79,7 @@ const SignInForm = () => {
                   placeholder="Enter your password"
               />
               <ErrorMessage name="password" component="div" />
-              <a href="" className='text-xs text-orange-500 '>Forgot password?</a>
+              <a className='text-xs text-orange-500 '>Forgot password?</a>
             </div>
 
             <div className=' flex flex-col items-center w-full my-2 px-2 gap-y-2'>

@@ -1,80 +1,66 @@
-import { useContext, useEffect, useReducer, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Image from "./Image"
 import Svg from "./Svg"
 import { CountVar } from "../../views/Home"
-import { updateReducer } from "../../reducers/reducer"
-import { getProduct, updateProduct, updateUser } from "../../services/productsServices"
+import { updateUser } from "../../services/usersServices"
 import { logInData } from "../../App"
+import Swal from "sweetalert2"
 
 
-const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}) => {
+const PictureProduct = ({src,pictureProductId,picClass,isOpen,openCart}) => {
 
   const [state, setState] = useState(false)//for red and grey heart if its true heart will change to red and change in handleColor fn
-  const{increase,decrease,list,setGeneralIndex} = useContext(CountVar)
+  const{increase,decrease,setGeneralIndex} = useContext(CountVar)
   const [showSvg, setShowSvg] = useState(false)//for the cart icon over on hover if its true
-  const [stateUpdate, dispatchUpdate] = useReducer(updateReducer,list)
-  const [isAdd, setIsAdd] = useState({})
   const [isAddedInfo, setIsAddedInfo] = useState(false)
   const {logedInUser,setLogedInUser}=useContext(logInData)
   
   
   useEffect(() => {//it is for running the second ternary to check if an item is deleted bg-green will show on image without any mouseEnteror mouseLeave 
-    const fetchProduct = async ()=>{
-      try {
-        const data = await getProduct(pictureProductId)
-        setIsAdd(data.data)
         if (logedInUser?.id) {
-          const checkUserList = logedInUser?.basketList?.find(item=> item?.id === pictureProductId)
+          const checkUserList = logedInUser?.basketList?.some(item=> item?.id === pictureProductId)
+          // setIsAddedInfo(checkUserList)
           checkUserList?setIsAddedInfo(true):setIsAddedInfo(false)
         } else {
           setIsAddedInfo(false)
         }
-      } catch (error) {
-        console.log('error ',error);
-      }
-    }
-    fetchProduct()
-  }, [isAdd,isAddedInfo])  
+  }, [logedInUser?.basketList])  
   
   useEffect(() => {
     const checkHeartIcon=()=>{//check for the wishList if it has product in it, set heartSvg to true, else false
       if (logedInUser?.id) {
-        const heart = logedInUser?.wishList?.find(id=>id == pictureProductId)
-        // console.log('heart ',heart);
+        const heart = logedInUser?.wishList?.find(id=>id === pictureProductId)
       heart ? setState(true) : setState(false)
       }
     }
     checkHeartIcon()
   }, [])
-  
-
-//   useEffect(() => {
-//     const getItem=()=>{
-//       const data = localStorage.getItem('user_log')
-//       setLogedInUser(JSON.parse(data))
-//     }
-//     getItem()
-// }, [logedInUser])
 
   const handleColor=async()=>{
-    // state?decrease():increase()
     if(logedInUser?.id){
-
       setState(!state)
       if(state){
         decrease()
         const indexItem = logedInUser?.wishList?.findIndex(item => item.id === pictureProductId)
         logedInUser?.wishList?.splice(indexItem,1)
-        setLogedInUser(logedInUser)
-        await updateUser(logedInUser,logedInUser?.id)
+        await updateUser(logedInUser,logedInUser?.id).then(result=>{//when we wanna udate user and right after that set to logedInUser it didnt work so we use then/catch to udate the database and after the update it set to logedInUser
+          setLogedInUser(result?.data)
+        }).catch(err=>console.log('error ',err))
       }else{
         increase()
         logedInUser?.wishList?.push(pictureProductId)
-        setLogedInUser(logedInUser)
-        await updateUser(logedInUser,logedInUser?.id)
+        await updateUser(logedInUser,logedInUser?.id).then(result=>{//when we wanna udate user and right after that set to logedInUser it didnt work so we use then/catch to udate the database and after the update it set to logedInUser
+          setLogedInUser(result?.data)
+        }).catch(err=>console.log('error ',err))
       }
     }else{
-      alert("Please Sign In First!!!")
+      Swal.fire({//sweet alert error for login first
+        position: "center",
+        icon: "error",
+        title: `Please Sign In First!!!`,
+        showConfirmButton: false,
+        timer: 1800
+      });
     }
   }
 
@@ -82,42 +68,20 @@ const PictureProduct = ({src,picIndex,pictureProductId,picClass,isOpen,openCart}
     setShowSvg(!showSvg)//for set showsvg to true and show cart icon on hover
   }
 
-//callback for get index of Size component
-  // const getIndex = (index)=>{
-  //   setIndex(index)
-  // }
-
-  //set an index for each cart individualy in this callback function for open the modal in Products Components
-  const handleModal =(cartIndex)=>{
-    setGeneralIndex(cartIndex)
-  }
-
-  const updateList =async()=>{
-    const newData = await updateProduct({...isAdd,isAddToCart:false},pictureProductId)
-    dispatchUpdate({type:'update',data:newData.data})
-    // console.log('newData',newData.data);
-  }
-
   const deleteItem = async()=>{
-    //first update the changes like set isAddToCart to false for delete it so green effect will not show on product
-    // updateList()
-
+    const deleteIndex = logedInUser?.basketList?.findIndex((item)=> {return item.id === pictureProductId})
     //delete the selected id from logedInUser
-    // setLogedInUser((prevLogedInUser?.basketList) => prevLogedInUser?.basketList?.filter((item) => item.id !== pictureProductId))
-    const deleteIndex = logedInUser?.basketList?.findIndex((item)=> {return item.id == pictureProductId})
-    // console.log('deleteIndex',deleteIndex);
     logedInUser?.basketList?.splice(deleteIndex,1)
-    await updateUser(logedInUser,logedInUser?.id)
-    setLogedInUser(logedInUser)
-    // localStorage.setItem('user_log',JSON.stringify(logedInUser))
+    await updateUser(logedInUser,logedInUser?.id).then(result=>{//when we wanna udate user and right after that set to logedInUser it didnt work so we use then/catch to udate the database and after the update it set to logedInUser
+      setLogedInUser(result?.data)
+    }).catch(err=>console.log('error ',err))
   }
 
   const handleOpenCart =()=>{
     openCart()
-    handleModal(picIndex)//picIndex is productIndex of List in db
+    setGeneralIndex(pictureProductId)//send it to products to modal in map
   }
 
-  
 
   return (
     <>

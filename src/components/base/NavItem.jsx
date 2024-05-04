@@ -2,20 +2,19 @@ import { createPortal } from "react-dom"
 import IconSpan from "./IconSpan"
 import Modal from "./Modal"
 import useModal from "../../hooks/useModal"
-import ProductCart from "../ProductCart"
 import { useContext, useEffect, useState } from "react"
-import { CountVar } from "../../views/Home"
 import { logInData } from "../../App"
 import OrderSpan from "./OrderSpan"
 import DeliveryPolicy from "./DeliveryPolicy"
-import { NavLink, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import ProductCartInModal from "../ProductCartInModal"
+import Swal from "sweetalert2"
 
 const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass }) => {
   const [openCart, toggleOpenCart] = useModal(false)
   const [isHamburgerMenu, toggleIsHamburgerMenu] = useModal(false)
-  // const {addToCart,setAddToCart}=useContext(CountVar)
   const { logedInUser, setLogedInUser } = useContext(logInData)
-  const [isUser, setIsUser] = useState('')
+  const [isUser, setIsUser] = useState('')//its set wether the user name or account
   const [isLogedOut, setIsLogedOut] = useState(true)
   const [statusMenu, setStatusMenu] = useState(true)
   const [windowWidth, setWindowWidth] = useState(0)
@@ -36,13 +35,7 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
       setWindowWidth(window.innerWidth)
     }
     userWidth()
-  }, [windowWidth])
-
-
-  // useEffect(() => {
-  //   const data = localStorage.getItem('user_log')
-  //   setLogedInUser(data)
-  // }, [logedInUser])
+  }, [window.innerWidth])
 
 
   //this function checks if user loged in so the name shows instead of account if not the account shows
@@ -54,11 +47,10 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
       } else {
         setIsUser('Account')
         setIsLogedOut(true)
-        // localStorage.clear()
       }
     }
     showName()
-  }, [isUser])
+  }, [logedInUser?.name])
 
 
   const numberOfAddedProducts = () => {
@@ -66,39 +58,56 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
     logedInUser?.basketList?.forEach(element => {
       sum += element.counterProduct
     });
-    // console.log('sum',sum);
     return sum
   }
 
   const toggleModal = () => {
     if (logedInUser?.id) {
-      // const data = localStorage.getItem('user_log')
-    // setLogedInUser(JSON.parse(data))
-
     // if there is items in addToCart so it opens modal
     if (logedInUser?.basketList?.length !== 0) {
       toggleOpenCart()
     }
     //if there is no items in cart to show
     else {
-      alert('Your Cart is Empty!!! Please Add Items And Try Again.')
+      Swal.fire({//sweet alert error for login first
+        position: "center",
+        icon: "warning",
+        title: `Your Cart is Empty!!! Please Add Items And Try Again.`,
+        showConfirmButton: true,
+        confirmButtonColor: "#FF7518"
+      });
     }
     }else{
-      alert("please sign in first!!!")
+      Swal.fire({//sweet alert error for login first
+        position: "center",
+        icon: "error",
+        title: `Please Sign In First!!!`,
+        showConfirmButton: false,
+        timer: 1800
+      });
     }
   }
   const handleHamburgerMenu = () => {
     toggleIsHamburgerMenu()
   }
 
-  const toggleMenu = () => {
+  const toggleMenu = () => {//to toggle adiv that when user click on user name the div will have flex display that has logout on it and when click on name again display will be hidden
     setStatusMenu(!statusMenu)
     statusMenu ? setClassMenu('flex') : setClassMenu('hidden')
   }
 
   const handleLogOut = () => {
-    // localStorage.clear();
     setLogedInUser({})
+    localStorage.clear();
+    Swal.fire({
+      position: "center",
+      width:300,
+      imageHeight: 200,
+      icon: "success",
+      title: `goodbye ${logedInUser?.name}`,
+      showConfirmButton: false,
+      timer: 1300
+    });
     navigate('/signIn')
   }
 
@@ -124,9 +133,9 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
               </svg>
             </IconSpan>
             :
-            windowWidth <= 768 ?
+            windowWidth <= 768 ?//in mobile view if width is <= 768 
               <div className="flex justify-end">
-                <span className="" onClick={() => navigate('/signIn')}>Logout</span>
+                <span className="" onClick={() => handleLogOut()}>Logout</span>
               </div>
               :
               <IconSpan
@@ -134,8 +143,8 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
                 text={`${isUser}`}
                 clickFunc={() => toggleMenu()}
               >
-                <div onClick={() => handleLogOut()} className={`menu absolute ${classMenu} min-w-[60px] top-5 shadow-[0_8px_16px_0px_rgba(0,0,0,0.3)] bg-white flex-col items-center justify-center`}>
-                  <span className="p-2 w-full text-center hover:bg-zinc-300">Log out</span>
+                <div onClick={() => handleLogOut()} className={`menu absolute rounded-s-md rounded-ee-md ${classMenu} min-w-[60px] top-5 shadow-[0px_5px_15px_0px_rgba(0,0,0,0.4)] bg-white flex-col items-center justify-center`}>
+                  <span className="p-2 w-full rounded-s-md rounded-ee-md text-center hover:bg-zinc-300">Log out</span>
                   {/* <span></span> */}
                 </div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person" viewBox="0 0 16 16">
@@ -155,7 +164,6 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
       </div>
       {/* create modal for hamburger menu */}
       {createPortal(
-        // windowWidth <= 768 ? 
         <Modal
           isOpen={isHamburgerMenu}
           toggleOpen={toggleIsHamburgerMenu}
@@ -165,7 +173,7 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
           positionModal={'w-[48%] flex flex-col flex-row-reverse h-fit justify-start'}
           positionModalContent={'flex-col h-[95%] justify-end my-2'}
         >
-          <div className="font-semibold w-full border-b-2 border-zinc-400">{logedInUser?.name}</div>
+          <div className="font-semibold w-full border-b-2 border-zinc-400">{isUser}</div>
           <NavItem
             parentClass={'flex-col w-full flex items-end gap-y-2'}
             accountClass={'w-full flex flex-col items-end gap-y-2'}
@@ -173,7 +181,6 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
             hamburgerClass={'hidden'}
           />
         </Modal>
-      // : null
         , document.body)}
 
       {createPortal(
@@ -191,23 +198,17 @@ const NavItem = ({ parentClass, hamburgerClass, categoriesClass, accountClass })
               <div className="top-Left w-full h-2/3 overflow-y-scroll pl-2 pt-1 flex flex-col border-2 border-gray rounded-md">
                 <p className="mb-1">Cart Details</p>
                 {logedInUser?.basketList?.map((item, index) => {
-                  return <ProductCart
-                    starRate={item?.rate}
-                    productCartId={item?.id}
-                    item={item}//for sending it to Star Component for changing rateStar 
+                  return <ProductCartInModal
+                    itemData={item}//for sending it to Star Component for changing rateStar 
                     checkIsModal={true}
                     isOpen={true}
-                    src={item?.url}
-                    cost={item?.cost * item?.counterProduct}
-                    productName={item?.name}
-                    material={item?.material}
                     productClass={'w-[80%] mb-3 flex gap-x-3 relative rounded sm:w-full'}
                     pictureProductClass={'w-1/3 md:w-full sm:w-full'}
                     explanationProductClass={'w-full justify-between md:w-[90%] sm:hidden'}
                     starClass={' sm:hidden'}
                   >
                     <div className="rounded-full w-5 h-5 bg-gray-300 text-orange-500 absolute top-[75%] left-[20%] flex justify-center items-center md:left-[45%] md:top-[85%] sm:left-[40%] sm:top-[80%] "><span>{item?.counterProduct}</span></div>
-                  </ProductCart>
+                  </ProductCartInModal>
                 })}
               </div>
               <div className="bottom-left h-1/3 w-full p-3 flex border-2 border-gray justify-between rounded-md">

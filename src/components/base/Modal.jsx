@@ -1,53 +1,49 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import IconSpan from "./IconSpan";
 import { CountVar } from "../../views/Home"
-import { updateProduct, updateUser } from "../../services/productsServices";
+import { updateUser } from "../../services/usersServices";
+import { updateProduct } from "../../services/productsServices";
 import { updateReducer } from "../../reducers/reducer";
 import { logInData } from "../../App";
+import Swal from "sweetalert2";
 
 
-const Modal = ({children,item,isOpen,toggleOpen,isCartOnPic,positionModalContainer,positionModal,positionModalHeader,positionModalContent,id,sizeIndex}) => {
+const Modal = ({children,item,isOpen,toggleOpen,isCartOnPic,positionModalContainer,positionModal,positionModalHeader,positionModalContent,sizeIndex}) => {
     const {list,color,counter,setCounter,size,productCost,setProductCost,setColor}=useContext(CountVar)
     const [state, setState] = useState(item)
     const [stateUpdate, dispatchUpdate] = useReducer(updateReducer, list)
     const {logedInUser,setLogedInUser}=useContext(logInData)
 
+
     useEffect(() => {
         setState(item)
     }, [item])
 
-    if(!isOpen) return null;//for open and close modal
-
-    // let jsonData = {}
-    // useEffect(() => {
-    //    const data = localStorage.getItem('addToCart_updatedData')
-    //    jsonData = JSON.parse(data)
-    //    if(jsonData !== null){
-    //     setNewAddToCart(jsonData)
-    //     }
-    //     else{
-    //         setNewAddToCart([])
-    //     }
-    // }, [newAddToCart])
-    
-
+    if(!isOpen) return null;//for open and close modal 
     
 const EditList=async()=>{
-    if (counter == 0 || color == -1) {
+    if (counter === 0 || color === -1) {
         alert('please add a size and counter...')
     }
     else if(logedInUser?.id){
         // update cart
-        const data = await updateProduct({...state,counterProduct:counter,size:size[sizeIndex]},id)
+        const data = await updateProduct({...state,counterProduct:counter,size:size[sizeIndex]},item.id)
         // dispatch for update
         dispatchUpdate({type:'update',data:data.data})
         logedInUser?.basketList?.push(data?.data)
-        setLogedInUser(logedInUser)
-        await updateUser(logedInUser,logedInUser?.id)
-        // localStorage.setItem('user_log',JSON.stringify(logedInUser))
+        await updateUser(logedInUser,logedInUser?.id).then(result=>{//when we wanna udate user and right after that set to logedInUser it didnt work so we use then/catch to udate the database and after the update it set to logedInUser
+            setLogedInUser(result?.data)
+        }).catch(err=>console.log('error ',err))
         handleSvgClose()
     }else{
-        alert('please sign in first!!!')
+        // alert('please sign in first!!!')
+        Swal.fire({//sweet alert error for login first
+            position: "center",
+            icon: "error",
+            title: `Please Sign In First!!!`,
+            showConfirmButton: false,
+            timer: 1800
+          });
     }
 }    
     //for cost in footer of modal
@@ -110,165 +106,3 @@ const EditList=async()=>{
 }
 
 export default Modal
-
-
-
-
-//for update counter of products and size of each id
-// const AddToCart = async (id) =>{
-//         try {
-//         const productCounter = doc(dataBase,'product-data',id)
-//         await updateDoc(productCounter,{counterProduct:counter,size:size[sizeIndex]})
-//         const get = await getDoc(productCounter)
-//         addToCart.push(get?.data())
-//         setAddToCart(addToCart)
-//         // console.log('lengh of addToCart',addToCart);
-//         } catch (error) {
-//             console.log('error',error);
-//         }
-//     }
-    
-// const updateCart = async (id) =>{
-//     const productCounter = doc(dataBase,'product-data',id)
-//     await updateDoc(productCounter,{counterProduct:counter,size:size[sizeIndex]})
-    
-//     // console.log('cachedList',cachedList);
-// }
-// const AddToCart=async(id)=>{
-//     try {
-//         const data = doc(dataBase,'product-data',id)
-//         const get = await getDoc(data)
-//         addToCart.push(get?.data())
-//         setAddToCart(addToCart)
-//         // console.log('AddToCart',addToCart);
-//     } catch (error) {
-//         console.log('error',error);
-//     }
-// }
-
-// const testState1 = 'test1'
-// const testState2 = {testId:1,testName:'test1'}
-
-
-// const initialState = async()=>{
-//     try {
-//         const idData = await getProduct(id)
-//         console.log('idData',idData.data);
-//         // console.log('idData without .data :',idData);
-//         setItemInModal(idData.data)
-//         // console.log('state',state);
-//     } catch (error) {
-//         console.log('error',error);
-//     }
-// };
-// initialState()
-
-    // console.log("item",item);
-
-
-//this useEffect is for fetching the data from database for storing it in a state 
-// useEffect(() => {
-//     const fetchData = async ()=>{
-//       try {
-//         const {data : dataProduct} = await getProduct(id)
-//         console.log('dataProduct',dataProduct);
-//         setFetchedData(dataProduct)
-//         // setState(prevState => ({
-//         //     ...prevState,
-//         //     [fetchedData.key]: fetchedData.value
-//         // }));
-//         // console.log('fetchedData :',fetchedData);
-//       } catch (error) {
-//         console.log('error',error);
-//       }
-//     }
-//     fetchData()
-//   }, [id])
-
-//   useEffect(() => {
-//     const fetchData = async ()=>{
-//       try {
-//         const {key , value} = await getProduct(id)
-//         // console.log('dataProduct',dataProduct);
-//         // setFetchedData(dataProduct)
-//         setState(prevState => ({
-//             ...prevState,
-//             [key]: value
-//         }));
-//         // console.log('fetchedData :',fetchedData);
-//       } catch (error) {
-//         console.log('error',error);
-//       }
-//     }
-//     fetchData()
-//   }, [list])
-
-  //this useEffect is gonna fill state with current value of fetchedData
-  //why?
-// useEffect(() => {
-//     setState(prevState => ({
-//         ...prevState,
-//         [fetchedData.key]: fetchedData.value
-//     }));
-//     console.log('state in second useEffect',state);
-//     console.log('fetchedData :',fetchedData);
-
-// }, [fetchedData])
-
-// console.log('state',state);
-//it is gonna set the chaned value into state and fill the global list for cart in navItem
-// const setCart = () =>{
-   
-    // console.log('state1 :',state);
-    // setState({...state,
-    //     counterProduct:counter,size:size[sizeIndex]}    
-    //     )
-    // console.log('state2 :',state);
-    // addToCart.push(fetchedData)
-    // setAddToCart(addToCart)
-    // console.log('addToCart',addToCart);
-    // }
-    
-//update value and set to fetchedData
-    // const updateCart = async () =>{
-    //     try {
-    //         // console.log('sizeIndex',sizeIndex);
-    //         const idIndex = state.findIndex((item)=>{return item.id === id})
-    //         console.log('idIndex',idIndex);
-    //         const data = await updateProduct({...state[idIndex],counterProduct:counter,size:size[sizeIndex]},id)
-    //         // const data = await updateProduct({...fetchedData,counterProduct:counter,size:size[sizeIndex]},id)
-    //         // setState(data)
-    //         const newData = await getProduct(id)
-    //         const {key , value} = newData.data
-    //         setState(prevState => ({
-    //             ...prevState,
-    //             [key]: value
-    //         }));
-    //         console.log('state',state);
-    //         // addToCart.push(data.data)
-    //         // setAddToCart(addToCart)
-    //         console.log('data',newData.data);
-    //         // console.log('fetchedData',fetchedData);
-    //         // console.log('addToCart',addToCart);
-    //     } catch (error) {
-    //         console.log('error',error);
-    //     }
-    // }
-    // const updateCart = async () =>{
-    //     try {
-    //         console.log('sizeIndex',sizeIndex);
-    //         const data = await updateProduct({...fetchedData,counterProduct:counter,size:size[sizeIndex]},id)
-    //         // setState(data)
-    //         setFetchedData(prevState => ({
-    //             ...prevState,
-    //             ...data.data
-    //         }));
-    //         addToCart.push(data.data)
-    //         // setAddToCart(addToCart)
-    //         console.log('data',data.data);
-    //         console.log('fetchedData',fetchedData);
-    //         // console.log('addToCart',addToCart);
-    //     } catch (error) {
-    //         console.log('error',error);
-    //     }
-    // }

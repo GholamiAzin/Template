@@ -1,5 +1,4 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
 import Register from '../components/base/Register'
 import Header from '../components/Header'
 import bigShop from '../assets/Images/happy_tiny_man_and_woman_with_shopping_bags_and_huge_gift_boxes.jpg'

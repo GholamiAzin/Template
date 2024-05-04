@@ -2,72 +2,28 @@ import { useContext, useEffect, useState } from "react"
 import IconSpan from "./base/IconSpan"
 import { CountVar } from "../views/Home"
 import { logInData } from "../App"
-import { getUser } from "../services/productsServices"
 
 const Footer = () => {
-  const {count,addToCart,setAddToCart,setCount} = useContext(CountVar)
-  const {logedInUser,setLogedInUser}=useContext(logInData)
+  const {count,setCount} = useContext(CountVar)
+  const {logedInUser}=useContext(logInData)
   const [footerLength, setFooterLength] = useState(0)
-  // const [added, setAdded] = useState(0)
-  // const [totalCost, setTotalCost] = useState(0)
 
-  // useEffect(() => {
-  //   const data = localStorage.getItem('addToCart_updatedData')
-  //   const jsonData = JSON.parse(data)
-  //   if( jsonData !== addToCart){
-  //     console.log('addToCart in footer',addToCart);
-  //     setAddToCart((prevCart) => [...prevCart, jsonData])
-  //   }
-  //   else{
-  //     console.log('hi Footer');
-  //   }
-  // }, [addToCart])
-  
   
   useEffect(() => {
-   const gettingLength=async()=>{
     if (logedInUser?.id) {
-      try {
-        const userData = await getUser(logedInUser?.id)
-        setLogedInUser(userData?.data)
-        setCount(userData?.data?.wishList.length)
-  
-      } catch (error) {
-        console.log('error ', error);
-      }
+        setCount(logedInUser?.wishList?.length)
+        setFooterLength(logedInUser?.basketList?.length)
     }else{
-      // setLogedInUser({})
+      setFooterLength(0)
       setCount(0)
     }
-
-   }
-   gettingLength()
-  }, [logedInUser])
+  }, [logedInUser?.wishList,logedInUser?.basketList])
   
-
-//for showing the number of items that added to cart and totalCost
-  // useEffect(() => {
-  //   const newAddedItems = addToCart?.length
-  //   let sum = 0
-  //   setAdded(newAddedItems)
-  //   //if addToCart is not empty then map over it and calculate the total price
-  //   if (addToCart?.length != 0) {
-  //     addToCart.map((item)=>{
-  //       sum += item?.counterProduct*item?.cost
-  //     })
-  //   }
-  //   setTotalCost(sum)
-  // }, [addToCart?.length])
-
-
   const calculateCost=()=>{
-    // const data = localStorage.getItem('addToCart_updatedData')
-    // setAddToCart(JSON.parse(data))
-    // getItemFromLocalStorage()
     let sum = 0
     if (logedInUser?.id) {
       // if addToCart is not empty then map over it and calculate the total price
-      if (logedInUser?.basketList?.length != 0) {
+      if (logedInUser?.basketList?.length !== 0) {
         logedInUser?.basketList?.map((item)=>{
           sum += item?.counterProduct*item?.cost
         })
@@ -75,20 +31,12 @@ const Footer = () => {
     }
   return sum
 }
-
-  // const lengthFn=()=>{
-  //   let length = 0
-  //   if (logedInUser?.id) {
-  //     length = logedInUser?.basketList?.length
-  //   }
-  //   return length
-  // }
     
   return (
     <div className="flex bg-orange-500 w-full px-2 py-1 justify-between text-white ">
         <div className="flex justify-between w-1/3 sm:mr-4">
           {/* the number of items that added in cart */}
-            <IconSpan parentDivClass={'gap-x-2'} explainSpanClass={'ml-2'} variables={`${logedInUser?.basketList?.length}`} text={`Items added to Cart`}>
+            <IconSpan parentDivClass={'gap-x-2'} explainSpanClass={'ml-2'} variables={`${footerLength}`} text={`Items added to Cart`}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-bag-plus" viewBox="0 0 16 16">
                     <path fillRule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5"/>
                     <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z"/>

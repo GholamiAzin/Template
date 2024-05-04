@@ -1,6 +1,6 @@
 // import { useState } from "react"
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 
 const Button = ({id,content,btnColor,newColor}) => {
@@ -13,18 +13,7 @@ const Button = ({id,content,btnColor,newColor}) => {
       console.log("color id",id)
 
       return color
-    }
-    // useEffect(() => {
-    //   // const handleColor = () =>{
-    //   //   setBtnColor(!color)
-    //   //   // setKey((prevKey)=>prevKey + 1)
-    //   //   return color
-    //   // }
-    //   handleColor()
-    // }, [id])
-    
-
-    
+    }    
     
 
   return (
