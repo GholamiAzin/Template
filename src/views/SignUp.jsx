@@ -10,7 +10,7 @@ const SignUp = () => {
         <header className='w-full'>
             <Header/>
         </header>
-        <main className='w-full flex flex-col bg-contain md:bg-[length:70%_40%] xl:bg-left xl:bg-[length:70%_70%] md:bg-[center_top] bg-no-repeat h-screen items-end sm:items-center md:items-center px-[10%] justify-center sm:justify-start gap-y-2' style={{backgroundImage : `url(${bigShop})`}}>
+        <main className='w-full flex flex-col bg-contain md:bg-[length:70%_40%] xl:bg-left xl:bg-[length:70%_90%] md:bg-[center_top] bg-no-repeat h-screen items-end sm:items-center md:items-center px-[10%] justify-center sm:justify-start gap-y-2' style={{backgroundImage : `url(${bigShop})`}}>
           <Register/>
         </main>
     </div>

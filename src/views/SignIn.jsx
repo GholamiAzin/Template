@@ -11,7 +11,7 @@ const SignIn = () => {
             <Header/>
         </header>
         {/* <main className='w-full relative flex flex-col bg-contain bg-no-repeat bg-center h-screen items-center justify-center gap-y-2' style={{backgroundImage : `url(${bigShop})`}}> */}
-        <main className='w-full flex flex-col bg-contain bg-no-repeat h-screen items-end sm:items-center md:items-center px-[10%] justify-center gap-y-2' style={{backgroundImage : `url(${bigShop})`}}>
+        <main className='w-full flex flex-col bg-contain bg-no-repeat md:bg-[length:70%_40%] xl:bg-left xl:bg-[length:70%_90%] h-screen items-end sm:items-center md:items-center px-[10%] justify-center gap-y-2' style={{backgroundImage : `url(${bigShop})`}}>
           {/* <div className="absolute rounded-lg inset-0 bg-white opacity-50"></div> */}
           <SignInForm/>
         </main>
