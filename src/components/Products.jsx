@@ -79,12 +79,6 @@ const setFn=()=>{
                   checkIsModal={true}//if its true it means modal is open so stars shouldnt change and it drills  to star component
                   isOpen={true}//isOpen send to pictureProduct so product doesnt have any hover things in modal
                   itemData={item}//for sending it to Star Component for changing rateStar 
-                  productCartId={list[index].id} 
-                  starRate={item?.rate}
-                  src={item?.url} 
-                  cost={item?.cost} 
-                  productName={item?.name}
-                  material={item?.material} 
                   productClass={'w-[60%] flex flex-col rounded md:w-[65%] sm:w-full'} 
                   pictureProductClass={'md:w-full sm:w-[60%]'}
                 />
