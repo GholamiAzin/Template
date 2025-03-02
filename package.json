@@ -10,6 +10,7 @@
     "clsx": "^2.1.0",
     "firebase": "^10.7.1",
     "formik": "^2.4.5",
+    "json-server": "^1.0.0-beta.3",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
     "react": "^18.2.0",
